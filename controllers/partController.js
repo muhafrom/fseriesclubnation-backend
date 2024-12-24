@@ -1,9 +1,7 @@
 const Part = require('../models/Part');
-const { upload } = require('../services/s3Service');
 
 const createPart = async (req, res) => {
-  const { title, description, url } = req.body;
-  const image = req.file ? req.file.location : null;
+  const { title, description, url, image } = req.body;
   try {
     const part = await Part.create({ title, description, url, image });
     res.status(201).send(part);
@@ -28,7 +26,7 @@ const updatePart = async (req, res) => {
 
   try {
     const part = await Part.findByPk(id);
-    if (!part) return res.status(404).send('Part not found.');
+    if (!part) return res.status(404).send({ error: { messeage: 'Part not found.' } });
 
     if (title !== undefined) part.title = title;
     if (description !== undefined) part.description = description;
@@ -46,9 +44,9 @@ const deletePart = async (req, res) => {
   const { id } = req.params;
   try {
     const part = await Part.findByPk(id);
-    if (!part) return res.status(404).send('Part not found.');
+    if (!part) return res.status(404).send({ error: { messeage: 'Part not found.' } });
     await part.destroy();
-    res.status(200).send('Part deleted successfully.');
+    res.status(200).send({success: { messeage: 'Part deleted successfully.'} });
   } catch (error) {
     res.status(500).send(error);
   }

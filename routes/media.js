@@ -1,12 +1,11 @@
 const express = require('express');
 const { createMedia, getMedia, updateMedia, deleteMedia } = require('../controllers/mediaController');
-const { upload } = require('../services/s3Service');
 
 const router = express.Router();
 
-router.post('/create', upload.single('image'), createMedia);
+router.post('/add', createMedia);
 router.get('/get', getMedia);
-router.put('/update/:id', upload.single('image'), updateMedia);
+router.put('/update/:id', updateMedia);
 router.delete('/delete/:id', deleteMedia);
 
 module.exports = router;

@@ -4,9 +4,9 @@ const { DataTypes } = require('sequelize');
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4, // Automatically generates a UUIDv4
+    defaultValue: DataTypes.UUIDV4, 
     allowNull: false,
-    primaryKey: true // Mark it as the primary key
+    primaryKey: true 
   },
   username: {
     type: DataTypes.STRING,
@@ -16,6 +16,14 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true
+    }
   }
 });
 
