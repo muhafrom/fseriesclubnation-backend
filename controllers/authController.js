@@ -5,7 +5,7 @@ const User = require('../models/User');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: process.env.SERVICE,
   auth: {
     user: process.env.EMAIL, 
     pass: process.env.EMAIL_PASSWORD 
@@ -37,19 +37,21 @@ const signup = async (req, res) => {
     user = await User.create({ username, password: hashedPassword, email });
 
     const mailOptions = {
-      from: `"fseriesclubnation." <${process.env.EMAIL}>`, 
+      from: `"${process.env.APP_NAME}" <${process.env.EMAIL}>`,
       to: email,
-      subject: 'Welcome to FSeries Clubnation Library.',
-      text: `Hi ${username},\n\nThank you for registering with FSeries Clubnation.. We're thrilled to have you on board!\n\nBest regards,\nThe Fseries clubnation Team`
+      subject: `Welcome to ${process.env.APP_NAME}!`,
+      text: process.env.WELCOME_MESSAGE
+      .replace('{{username}}', username)
+      .replace('{{APP_NAME}}', process.env.APP_NAME)
+      .replace('{{APP_NAME}}', process.env.APP_NAME),
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.error('Error sending email:', err);
-        return res.status(500).send({error: { messeage: 'User created, but failed to send email.'}});
       }
-      console.log('Email sent:', info.response);
-      res.status(201).send({success: { messeage: 'User created and email sent.'}});
+      console.log('Email sent.');
+      res.status(201).send({success: { messeage: 'User created.'}});
     });
   } catch (error) {
     console.error('Error during signup:', error);
