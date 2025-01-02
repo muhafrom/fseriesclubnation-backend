@@ -49,7 +49,6 @@ const signup = async (req, res) => {
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.error('Error sending email:', err);
-        res.status(201).send({success: { messeage: 'User created.'}});
       }
       console.log('Email sent.');
       res.status(201).send({success: { messeage: 'User created.'}});
